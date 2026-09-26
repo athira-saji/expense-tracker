@@ -1,2309 +1,264 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>SpendWise | Expense Tracker</title>
-
-
-    <style>
-
-        /* ==================================================
-           RESET
-        ================================================== */
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-
-        /* ==================================================
-           BODY
-        ================================================== */
-
-        body {
-
-            font-family:
-                Inter,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Arial,
-                sans-serif;
-
-            background: #f6f7fb;
-
-            color: #1f2937;
-
-            min-height: 100vh;
-
-        }
-
-
-        /* ==================================================
-           COMMON
-        ================================================== */
-
-        button,
-        input,
-        select {
-
-            font: inherit;
-
-        }
-
-
-        button {
-
-            cursor: pointer;
-
-        }
-
-
-        .hidden {
-
-            display: none !important;
-
-        }
-
-
-        .message {
-
-            margin-top: 12px;
-
-            font-size: 14px;
-
-            font-weight: 500;
-
-        }
-
-
-        .error {
-
-            color: #dc2626;
-
-        }
-
-
-        .success {
-
-            color: #16a34a;
-
-        }
-
-
-        /* ==================================================
-           LOGIN PAGE
-        ================================================== */
-
-        .login-page {
-
-            min-height: 100vh;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            padding: 24px;
-
-            background:
-                radial-gradient(
-                    circle at top left,
-                    #e0e7ff 0,
-                    transparent 35%
-                ),
-                radial-gradient(
-                    circle at bottom right,
-                    #dbeafe 0,
-                    transparent 35%
-                ),
-                #f6f7fb;
-
-        }
-
-
-        .login-card {
-
-            width: 100%;
-
-            max-width: 430px;
-
-            background: white;
-
-            padding: 42px;
-
-            border-radius: 20px;
-
-            box-shadow:
-                0 20px 50px rgba(15, 23, 42, 0.10);
-
-        }
-
-
-        .brand {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-            margin-bottom: 32px;
-
-        }
-
-
-        .brand-icon {
-
-            width: 46px;
-
-            height: 46px;
-
-            border-radius: 13px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            background: #4f46e5;
-
-            color: white;
-
-            font-size: 22px;
-
-            font-weight: 700;
-
-        }
-
-
-        .brand-name {
-
-            font-size: 22px;
-
-            font-weight: 750;
-
-            color: #111827;
-
-        }
-
-
-        .brand-subtitle {
-
-            color: #6b7280;
-
-            font-size: 13px;
-
-            margin-top: 2px;
-
-        }
-
-
-        .login-card h1 {
-
-            font-size: 28px;
-
-            color: #111827;
-
-            margin-bottom: 8px;
-
-        }
-
-
-        .login-description {
-
-            color: #6b7280;
-
-            font-size: 14px;
-
-            line-height: 1.6;
-
-            margin-bottom: 28px;
-
-        }
-
-
-        /* ==================================================
-           FORM
-        ================================================== */
-
-        .form-group {
-
-            margin-bottom: 17px;
-
-        }
-
-
-        .form-group label {
-
-            display: block;
-
-            font-size: 13px;
-
-            font-weight: 600;
-
-            color: #374151;
-
-            margin-bottom: 7px;
-
-        }
-
-
-        input,
-        select {
-
-            width: 100%;
-
-            padding: 12px 14px;
-
-            border: 1px solid #d1d5db;
-
-            border-radius: 9px;
-
-            background: white;
-
-            color: #111827;
-
-            outline: none;
-
-            transition:
-                border-color 0.2s,
-                box-shadow 0.2s;
-
-        }
-
-
-        input:focus,
-        select:focus {
-
-            border-color: #6366f1;
-
-            box-shadow:
-                0 0 0 3px rgba(99, 102, 241, 0.12);
-
-        }
-
-
-        input::placeholder {
-
-            color: #9ca3af;
-
-        }
-
-
-        /* ==================================================
-           BUTTONS
-        ================================================== */
-
-        .primary-button {
-
-            width: 100%;
-
-            padding: 12px 18px;
-
-            border: none;
-
-            border-radius: 9px;
-
-            background: #4f46e5;
-
-            color: white;
-
-            font-weight: 650;
-
-            transition:
-                background 0.2s,
-                transform 0.1s;
-
-        }
-
-
-        .primary-button:hover {
-
-            background: #4338ca;
-
-        }
-
-
-        .primary-button:active {
-
-            transform: translateY(1px);
-
-        }
-
-
-        .secondary-button {
-
-            border: 1px solid #e5e7eb;
-
-            background: white;
-
-            color: #374151;
-
-            padding: 9px 15px;
-
-            border-radius: 8px;
-
-            font-weight: 600;
-
-        }
-
-
-        .secondary-button:hover {
-
-            background: #f9fafb;
-
-        }
-
-
-        /* ==================================================
-           DASHBOARD
-        ================================================== */
-
-        .dashboard {
-
-            min-height: 100vh;
-
-        }
-
-
-        .navbar {
-
-            height: 72px;
-
-            background: white;
-
-            border-bottom: 1px solid #e5e7eb;
-
-            display: flex;
-
-            align-items: center;
-
-        }
-
-
-        .navbar-inner {
-
-            width: 100%;
-
-            max-width: 1120px;
-
-            margin: auto;
-
-            padding: 0 24px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-        }
-
-
-        .nav-brand {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-        }
-
-
-        .nav-icon {
-
-            width: 36px;
-
-            height: 36px;
-
-            border-radius: 10px;
-
-            background: #4f46e5;
-
-            color: white;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-weight: 700;
-
-        }
-
-
-        .nav-name {
-
-            font-weight: 750;
-
-            color: #111827;
-
-            font-size: 18px;
-
-        }
-
-
-        .nav-right {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 15px;
-
-        }
-
-
-        .user-label {
-
-            font-size: 14px;
-
-            color: #6b7280;
-
-        }
-
-
-        /* ==================================================
-           MAIN CONTAINER
-        ================================================== */
-
-        .main-container {
-
-            max-width: 1120px;
-
-            margin: auto;
-
-            padding: 36px 24px 50px;
-
-        }
-
-
-        .welcome {
-
-            margin-bottom: 28px;
-
-        }
-
-
-        .welcome h1 {
-
-            font-size: 30px;
-
-            color: #111827;
-
-            margin-bottom: 6px;
-
-        }
-
-
-        .welcome p {
-
-            color: #6b7280;
-
-            font-size: 15px;
-
-        }
-
-
-        /* ==================================================
-           SUMMARY CARDS
-        ================================================== */
-
-        .summary-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 18px;
-
-            margin-bottom: 24px;
-
-        }
-
-
-        .stat-card {
-
-            background: white;
-
-            border: 1px solid #e5e7eb;
-
-            border-radius: 14px;
-
-            padding: 21px;
-
-        }
-
-
-        .stat-label {
-
-            color: #6b7280;
-
-            font-size: 13px;
-
-            font-weight: 600;
-
-            margin-bottom: 9px;
-
-        }
-
-
-        .stat-value {
-
-            color: #111827;
-
-            font-size: 25px;
-
-            font-weight: 750;
-
-        }
-
-
-        .stat-icon {
-
-            width: 36px;
-
-            height: 36px;
-
-            border-radius: 9px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            background: #eef2ff;
-
-            color: #4f46e5;
-
-            margin-bottom: 13px;
-
-            font-size: 17px;
-
-            font-weight: 700;
-
-        }
-
-
-        /* ==================================================
-           TWO COLUMN LAYOUT
-        ================================================== */
-
-        .content-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                360px 1fr;
-
-            gap: 22px;
-
-            align-items: start;
-
-        }
-
-
-        .card {
-
-            background: white;
-
-            border: 1px solid #e5e7eb;
-
-            border-radius: 14px;
-
-            padding: 23px;
-
-        }
-
-
-        .card-header {
-
-            margin-bottom: 20px;
-
-        }
-
-
-        .card-header h2 {
-
-            font-size: 18px;
-
-            color: #111827;
-
-            margin-bottom: 5px;
-
-        }
-
-
-        .card-header p {
-
-            color: #9ca3af;
-
-            font-size: 13px;
-
-        }
-
-
-        /* ==================================================
-           EXPENSE FORM
-        ================================================== */
-
-        .add-button {
-
-            margin-top: 5px;
-
-        }
-
-
-        /* ==================================================
-           EXPENSE LIST
-        ================================================== */
-
-        .expense-list {
-
-            display: flex;
-
-            flex-direction: column;
-
-            gap: 11px;
-
-        }
-
-
-        .expense {
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            gap: 15px;
-
-            padding: 15px;
-
-            border: 1px solid #e5e7eb;
-
-            border-radius: 11px;
-
-            transition:
-                border-color 0.2s,
-                background 0.2s;
-
-        }
-
-
-        .expense:hover {
-
-            border-color: #c7d2fe;
-
-            background: #fafaff;
-
-        }
-
-
-        .expense-left {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-            min-width: 0;
-
-        }
-
-
-        .expense-icon {
-
-            flex-shrink: 0;
-
-            width: 40px;
-
-            height: 40px;
-
-            border-radius: 10px;
-
-            background: #eef2ff;
-
-            color: #4f46e5;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-size: 15px;
-
-            font-weight: 700;
-
-        }
-
-
-        .expense-info {
-
-            min-width: 0;
-
-        }
-
-
-        .expense-title {
-
-            color: #111827;
-
-            font-size: 14px;
-
-            font-weight: 650;
-
-            margin-bottom: 4px;
-
-            white-space: nowrap;
-
-            overflow: hidden;
-
-            text-overflow: ellipsis;
-
-        }
-
-
-        .expense-meta {
-
-            color: #9ca3af;
-
-            font-size: 12px;
-
-        }
-
-
-        .expense-amount {
-
-            flex-shrink: 0;
-
-            color: #111827;
-
-            font-size: 14px;
-
-            font-weight: 700;
-
-        }
-
-
-        /* ==================================================
-           SUMMARY
-        ================================================== */
-
-        .total-box {
-
-            background: #f5f3ff;
-
-            border-radius: 11px;
-
-            padding: 17px;
-
-            margin-bottom: 20px;
-
-        }
-
-
-        .total-label {
-
-            color: #6d5bd0;
-
-            font-size: 12px;
-
-            font-weight: 600;
-
-            margin-bottom: 5px;
-
-        }
-
-
-        .total-value {
-
-            color: #312e81;
-
-            font-size: 25px;
-
-            font-weight: 750;
-
-        }
-
-
-        .category-title {
-
-            font-size: 13px;
-
-            font-weight: 650;
-
-            color: #374151;
-
-            margin-bottom: 10px;
-
-        }
-
-
-        .category-list {
-
-            display: flex;
-
-            flex-direction: column;
-
-        }
-
-
-        .category {
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            padding: 11px 0;
-
-            border-bottom: 1px solid #f0f0f0;
-
-        }
-
-
-        .category:last-child {
-
-            border-bottom: none;
-
-        }
-
-
-        .category-name {
-
-            font-size: 13px;
-
-            color: #4b5563;
-
-        }
-
-
-        .category-amount {
-
-            font-size: 13px;
-
-            color: #111827;
-
-            font-weight: 650;
-
-        }
-
-
-        /* ==================================================
-           EMPTY STATE
-        ================================================== */
-
-        .empty-state {
-
-            text-align: center;
-
-            padding: 38px 20px;
-
-            color: #9ca3af;
-
-        }
-
-
-        .empty-icon {
-
-            width: 46px;
-
-            height: 46px;
-
-            border-radius: 50%;
-
-            background: #f3f4f6;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            margin: 0 auto 12px;
-
-            color: #6b7280;
-
-            font-weight: 700;
-
-        }
-
-
-        .empty-state p {
-
-            font-size: 13px;
-
-        }
-
-
-        /* ==================================================
-           RESPONSIVE
-        ================================================== */
-
-        @media (max-width: 850px) {
-
-            .content-grid {
-
-                grid-template-columns: 1fr;
-
-            }
-
-            .summary-grid {
-
-                grid-template-columns:
-                    repeat(3, 1fr);
-
-            }
-
-        }
-
-
-        @media (max-width: 650px) {
-
-            .login-card {
-
-                padding: 30px 24px;
-
-            }
-
-
-            .main-container {
-
-                padding:
-                    25px 16px 40px;
-
-            }
-
-
-            .navbar-inner {
-
-                padding:
-                    0 16px;
-
-            }
-
-
-            .user-label {
-
-                display: none;
-
-            }
-
-
-            .welcome h1 {
-
-                font-size: 25px;
-
-            }
-
-
-            .summary-grid {
-
-                grid-template-columns: 1fr;
-
-                gap: 10px;
-
-            }
-
-
-            .stat-card {
-
-                padding: 16px;
-
-            }
-
-
-            .stat-icon {
-
-                display: none;
-
-            }
-
-
-            .expense {
-
-                align-items: flex-start;
-
-            }
-
-
-        }
-
-    </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpendWise | Expense Tracker</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#f6f7fb;color:#1f2937;min-height:100vh}
+button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.message{margin-top:12px;font-size:14px;font-weight:500}.error{color:#dc2626}.success{color:#16a34a}
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at top left,#e0e7ff 0,transparent 35%),radial-gradient(circle at bottom right,#dbeafe 0,transparent 35%),#f6f7fb}
+.login-card{width:100%;max-width:430px;background:white;padding:42px;border-radius:20px;box-shadow:0 20px 50px rgba(15,23,42,.10)}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:32px}.brand-icon{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:#4f46e5;color:white;font-size:22px;font-weight:700}.brand-name{font-size:22px;font-weight:750;color:#111827}.brand-subtitle{color:#6b7280;font-size:13px;margin-top:2px}
+.login-card h1{font-size:28px;color:#111827;margin-bottom:8px}.login-description{color:#6b7280;font-size:14px;line-height:1.6;margin-bottom:28px}
+.form-group{margin-bottom:17px}.form-group label{display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:7px}
+input,select{width:100%;padding:12px 14px;border:1px solid #d1d5db;border-radius:9px;background:white;color:#111827;outline:none;transition:border-color .2s,box-shadow .2s}
+input:focus,select:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.12)}input::placeholder{color:#9ca3af}
+.primary-button{width:100%;padding:12px 18px;border:none;border-radius:9px;background:#4f46e5;color:white;font-weight:650;transition:background .2s,transform .1s}.primary-button:hover{background:#4338ca}.primary-button:active{transform:translateY(1px)}
+.secondary-button{border:1px solid #e5e7eb;background:white;color:#374151;padding:9px 15px;border-radius:8px;font-weight:600}.secondary-button:hover{background:#f9fafb}
+.dashboard{min-height:100vh}.navbar{height:72px;background:white;border-bottom:1px solid #e5e7eb;display:flex;align-items:center}.navbar-inner{width:100%;max-width:1120px;margin:auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:10px}.nav-icon{width:36px;height:36px;border-radius:10px;background:#4f46e5;color:white;display:flex;align-items:center;justify-content:center;font-weight:700}.nav-name{font-weight:750;color:#111827;font-size:18px}.nav-right{display:flex;align-items:center;gap:15px}.user-label{font-size:14px;color:#6b7280}
+.main-container{max-width:1120px;margin:auto;padding:36px 24px 50px}.welcome{margin-bottom:28px}.welcome h1{font-size:30px;color:#111827;margin-bottom:6px}.welcome p{color:#6b7280;font-size:15px}
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:24px}.stat-card{background:white;border:1px solid #e5e7eb;border-radius:14px;padding:21px}.stat-label{color:#6b7280;font-size:13px;font-weight:600;margin-bottom:9px}.stat-value{color:#111827;font-size:25px;font-weight:750}.stat-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:#eef2ff;color:#4f46e5;margin-bottom:13px;font-size:17px;font-weight:700}
+.content-grid{display:grid;grid-template-columns:360px 1fr;gap:22px;align-items:start}.card{background:white;border:1px solid #e5e7eb;border-radius:14px;padding:23px}.card-header{margin-bottom:20px}.card-header h2{font-size:18px;color:#111827;margin-bottom:5px}.card-header p{color:#9ca3af;font-size:13px}.add-button{margin-top:5px}
+.expense-list{display:flex;flex-direction:column;gap:11px}.expense{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px;border:1px solid #e5e7eb;border-radius:11px;transition:border-color .2s,background .2s}.expense:hover{border-color:#c7d2fe;background:#fafaff}.expense-left{display:flex;align-items:center;gap:12px;min-width:0}.expense-icon{flex-shrink:0;width:40px;height:40px;border-radius:10px;background:#eef2ff;color:#4f46e5;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700}.expense-info{min-width:0}.expense-title{color:#111827;font-size:14px;font-weight:650;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.expense-meta{color:#9ca3af;font-size:12px}.expense-amount{flex-shrink:0;color:#111827;font-size:14px;font-weight:700}
+.total-box{background:#f5f3ff;border-radius:11px;padding:17px;margin-bottom:20px}.total-label{color:#6d5bd0;font-size:12px;font-weight:600;margin-bottom:5px}.total-value{color:#312e81;font-size:25px;font-weight:750}.category-title{font-size:13px;font-weight:650;color:#374151;margin-bottom:10px}.category-list{display:flex;flex-direction:column}.category{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid #f0f0f0}.category:last-child{border-bottom:none}.category-name{font-size:13px;color:#4b5563}.category-amount{font-size:13px;color:#111827;font-weight:650}
+.empty-state{text-align:center;padding:38px 20px;color:#9ca3af}.empty-icon{width:46px;height:46px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:#6b7280;font-weight:700}.empty-state p{font-size:13px}
+@media(max-width:850px){.content-grid{grid-template-columns:1fr}.summary-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:650px){.login-card{padding:30px 24px}.main-container{padding:25px 16px 40px}.navbar-inner{padding:0 16px}.user-label{display:none}.welcome h1{font-size:25px}.summary-grid{grid-template-columns:1fr;gap:10px}.stat-card{padding:16px}.stat-icon{display:none}.expense{align-items:flex-start}}
+</style>
 </head>
-
-
 <body>
 
-
-<!-- ======================================================
-     LOGIN PAGE
-====================================================== -->
-
 <div id="loginSection" class="login-page">
-
-    <div class="login-card">
-
-
-        <div class="brand">
-
-            <div class="brand-icon">
-                ₹
-            </div>
-
-            <div>
-
-                <div class="brand-name">
-                    SpendWise
-                </div>
-
-                <div class="brand-subtitle">
-                    Personal Expense Tracker
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <h1>
-            Welcome back
-        </h1>
-
-
-        <p class="login-description">
-            Sign in to manage your expenses and
-            keep track of your spending.
-        </p>
-
-
-        <div class="form-group">
-
-            <label for="username">
-                Username
-            </label>
-
-            <input
-                type="text"
-                id="username"
-                placeholder="Enter your username"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label for="password">
-                Password
-            </label>
-
-            <input
-                type="password"
-                id="password"
-                placeholder="Enter your password"
-            >
-
-        </div>
-
-
-        <button
-            class="primary-button"
-            onclick="login()"
-        >
-            Sign In
-        </button>
-
-
-        <p
-            id="loginMessage"
-            class="message"
-        ></p>
-
-
-    </div>
-
+<div class="login-card">
+<div class="brand"><div class="brand-icon">₹</div><div><div class="brand-name">SpendWise</div><div class="brand-subtitle">Personal Expense Tracker</div></div></div>
+<h1>Welcome back</h1>
+<p class="login-description">Sign in to manage your expenses and keep track of your spending.</p>
+<div class="form-group"><label for="username">Username</label><input type="text" id="username" placeholder="Enter your username"></div>
+<div class="form-group"><label for="password">Password</label><input type="password" id="password" placeholder="Enter your password"></div>
+<button class="primary-button" onclick="login()">Sign In</button>
+<p id="loginMessage" class="message"></p>
+</div>
 </div>
 
-
-
-<!-- ======================================================
-     DASHBOARD
-====================================================== -->
-
-<div
-    id="dashboardSection"
-    class="dashboard hidden"
->
-
-
-    <!-- NAVBAR -->
-
-    <nav class="navbar">
-
-        <div class="navbar-inner">
-
-
-            <div class="nav-brand">
-
-                <div class="nav-icon">
-                    ₹
-                </div>
-
-                <div class="nav-name">
-                    SpendWise
-                </div>
-
-            </div>
-
-
-            <div class="nav-right">
-
-                <span
-                    id="userLabel"
-                    class="user-label"
-                ></span>
-
-                <button
-                    class="secondary-button"
-                    onclick="logout()"
-                >
-                    Logout
-                </button>
-
-            </div>
-
-
-        </div>
-
-    </nav>
-
-
-
-    <!-- MAIN -->
-
-    <main class="main-container">
-
-
-        <!-- WELCOME -->
-
-        <div class="welcome">
-
-            <h1>
-                Your Dashboard
-            </h1>
-
-            <p>
-                Track your spending and stay on top
-                of your finances.
-            </p>
-
-        </div>
-
-
-
-        <!-- SUMMARY CARDS -->
-
-        <div class="summary-grid">
-
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    ₹
-                </div>
-
-                <div class="stat-label">
-                    Total Spent
-                </div>
-
-                <div
-                    id="totalSpent"
-                    class="stat-value"
-                >
-                    ₹0
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    #
-                </div>
-
-                <div class="stat-label">
-                    Total Expenses
-                </div>
-
-                <div
-                    id="expenseCount"
-                    class="stat-value"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    %
-                </div>
-
-                <div class="stat-label">
-                    Categories
-                </div>
-
-                <div
-                    id="categoryCount"
-                    class="stat-value"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-        </div>
-
-
-
-        <!-- CONTENT -->
-
-        <div class="content-grid">
-
-
-            <!-- ADD EXPENSE -->
-
-            <div class="card">
-
-
-                <div class="card-header">
-
-                    <h2>
-                        Add Expense
-                    </h2>
-
-                    <p>
-                        Record a new transaction
-                    </p>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="title">
-                        Title
-                    </label>
-
-                    <input
-                        type="text"
-                        id="title"
-                        placeholder="e.g. Lunch"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="amount">
-                        Amount
-                    </label>
-
-                    <input
-                        type="number"
-                        id="amount"
-                        placeholder="e.g. 250"
-                        min="0"
-                        step="0.01"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="category">
-                        Category
-                    </label>
-
-                    <select id="category">
-
-                        <option value="">
-                            Select category
-                        </option>
-
-                        <option value="Food">
-                            Food
-                        </option>
-
-                        <option value="Transport">
-                            Transport
-                        </option>
-
-                        <option value="Shopping">
-                            Shopping
-                        </option>
-
-                        <option value="Bills">
-                            Bills
-                        </option>
-
-                        <option value="Entertainment">
-                            Entertainment
-                        </option>
-
-                        <option value="Health">
-                            Health
-                        </option>
-
-                        <option value="Education">
-                            Education
-                        </option>
-
-                        <option value="Other">
-                            Other
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="date">
-                        Date
-                    </label>
-
-                    <input
-                        type="date"
-                        id="date"
-                    >
-
-                </div>
-
-
-                <button
-                    class="primary-button add-button"
-                    onclick="addExpense()"
-                >
-                    Add Expense
-                </button>
-
-
-                <p
-                    id="expenseMessage"
-                    class="message"
-                ></p>
-
-
-            </div>
-
-
-
-            <!-- RIGHT SIDE -->
-
-            <div>
-
-
-                <!-- SPENDING SUMMARY -->
-
-                <div class="card">
-
-
-                    <div class="card-header">
-
-                        <h2>
-                            Spending Summary
-                        </h2>
-
-                        <p>
-                            See where your money goes
-                        </p>
-
-                    </div>
-
-
-                    <div id="summary">
-
-                        <div class="empty-state">
-
-                            <p>
-                                Loading summary...
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                </div>
-
-
-                <br>
-
-
-                <!-- EXPENSE LIST -->
-
-                <div class="card">
-
-
-                    <div class="card-header">
-
-                        <h2>
-                            Recent Expenses
-                        </h2>
-
-                        <p>
-                            Your recorded transactions
-                        </p>
-
-                    </div>
-
-
-                    <div
-                        id="expenses"
-                        class="expense-list"
-                    >
-
-                        <div class="empty-state">
-
-                            <p>
-                                Loading expenses...
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-    </main>
-
+<div id="dashboardSection" class="dashboard hidden">
+<nav class="navbar">
+<div class="navbar-inner">
+<div class="nav-brand"><div class="nav-icon">₹</div><div class="nav-name">SpendWise</div></div>
+<div class="nav-right"><span id="userLabel" class="user-label"></span><button class="secondary-button" onclick="logout()">Logout</button></div>
+</div>
+</nav>
+
+<main class="main-container">
+<div class="welcome"><h1>Your Dashboard</h1><p>Track your spending and stay on top of your finances.</p></div>
+
+<div class="summary-grid">
+<div class="stat-card"><div class="stat-icon">₹</div><div class="stat-label">Total Spent</div><div id="totalSpent" class="stat-value">₹0</div></div>
+<div class="stat-card"><div class="stat-icon">#</div><div class="stat-label">Total Expenses</div><div id="expenseCount" class="stat-value">0</div></div>
+<div class="stat-card"><div class="stat-icon">%</div><div class="stat-label">Categories</div><div id="categoryCount" class="stat-value">0</div></div>
 </div>
 
+<div class="content-grid">
+<div class="card">
+<div class="card-header"><h2>Add Expense</h2><p>Record a new transaction</p></div>
+<div class="form-group"><label for="title">Title</label><input type="text" id="title" placeholder="e.g. Lunch"></div>
+<div class="form-group"><label for="amount">Amount</label><input type="number" id="amount" placeholder="e.g. 250" min="0" step="0.01"></div>
+<div class="form-group"><label for="category">Category</label><select id="category"><option value="">Select category</option><option value="Food">Food</option><option value="Transport">Transport</option><option value="Shopping">Shopping</option><option value="Bills">Bills</option><option value="Entertainment">Entertainment</option><option value="Health">Health</option><option value="Education">Education</option><option value="Other">Other</option></select></div>
+<div class="form-group"><label for="date">Date</label><input type="date" id="date"></div>
+<button class="primary-button add-button" onclick="addExpense()">Add Expense</button>
+<p id="expenseMessage" class="message"></p>
+</div>
 
+<div>
+<div class="card">
+<div class="card-header"><h2>Spending Summary</h2><p>See where your money goes</p></div>
+<div id="summary"><div class="empty-state"><p>Loading summary...</p></div></div>
+</div>
+
+<br>
+
+<div class="card">
+<div class="card-header"><h2>Recent Expenses</h2><p>Your recorded transactions</p></div>
+<div id="expenses" class="expense-list"><div class="empty-state"><p>Loading expenses...</p></div></div>
+</div>
+</div>
+</div>
+</main>
+</div>
 
 <script>
-
-
-    /* ==================================================
-       API
-    ================================================== */
-
-    const API_URL =
-        "http://127.0.0.1:8000";
-
-
-    /* ==================================================
-       AUTHENTICATION
-    ================================================== */
-
-    let accessToken =
-        localStorage.getItem("accessToken");
-
-
-    /* ==================================================
-       INITIAL PAGE LOAD
-    ================================================== */
-
-    if (accessToken) {
-
-        showDashboard();
-
-    }
-
-
-    /* ==================================================
-       LOGIN
-    ================================================== */
-
-    async function login() {
-
-        const username =
-            document
-                .getElementById("username")
-                .value
-                .trim();
-
-
-        const password =
-            document
-                .getElementById("password")
-                .value;
-
-
-        if (!username || !password) {
-
-            showLoginMessage(
-                "Please enter your username and password.",
-                true
-            );
-
-            return;
-
-        }
-
-
-        try {
-
-            const response =
-                await fetch(
-                    `${API_URL}/api/auth/login/`,
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
-
-                        body: JSON.stringify({
-
-                            username:
-                                username,
-
-                            password:
-                                password
-
-                        })
-                    }
-                );
-
-
-            const data =
-                await response.json();
-
-
-            if (!response.ok) {
-
-                showLoginMessage(
-                    data.detail ||
-                    "Invalid username or password.",
-                    true
-                );
-
-                return;
-
-            }
-
-
-            accessToken =
-                data.access;
-
-
-            localStorage.setItem(
-                "accessToken",
-                accessToken
-            );
-
-
-            showDashboard();
-
-        }
-
-
-        catch (error) {
-
-            console.error(
-                "Login error:",
-                error
-            );
-
-
-            showLoginMessage(
-                "Could not connect to the server.",
-                true
-            );
-
-        }
-
-    }
-
-
-    /* ==================================================
-       SHOW DASHBOARD
-    ================================================== */
-
-    function showDashboard() {
-
-        if (!accessToken) {
-
-            return;
-
-        }
-
-
-        document
-            .getElementById("loginSection")
-            .classList.add("hidden");
-
-
-        document
-            .getElementById("dashboardSection")
-            .classList.remove("hidden");
-
-
-        loadExpenses();
-
-        loadSummary();
-
-    }
-
-
-    /* ==================================================
-       LOGOUT
-    ================================================== */
-
-    function logout() {
-
-        accessToken = "";
-
-
-        localStorage.removeItem(
-            "accessToken"
-        );
-
-
-        document
-            .getElementById("dashboardSection")
-            .classList.add("hidden");
-
-
-        document
-            .getElementById("loginSection")
-            .classList.remove("hidden");
-
-
-        document.getElementById(
-            "username"
-        ).value = "";
-
-
-        document.getElementById(
-            "password"
-        ).value = "";
-
-
-        showLoginMessage(
-            "You have been logged out.",
-            false
-        );
-
-    }
-
-
-    /* ==================================================
-       ADD EXPENSE
-    ================================================== */
-
-    async function addExpense() {
-
-        const title =
-            document
-                .getElementById("title")
-                .value
-                .trim();
-
-
-        const amount =
-            document
-                .getElementById("amount")
-                .value;
-
-
-        const category =
-            document
-                .getElementById("category")
-                .value;
-
-
-        const date =
-            document
-                .getElementById("date")
-                .value;
-
-
-        if (
-            !title ||
-            !amount ||
-            !category ||
-            !date
-        ) {
-
-            showExpenseMessage(
-                "Please fill in all fields.",
-                true
-            );
-
-            return;
-
-        }
-
-
-        try {
-
-            const response =
-                await fetch(
-                    `${API_URL}/api/expenses/`,
-                    {
-                        method: "POST",
-
-                        headers: {
-
-                            "Content-Type":
-                                "application/json",
-
-                            "Authorization":
-                                `Bearer ${accessToken}`
-
-                        },
-
-                        body: JSON.stringify({
-
-                            title:
-                                title,
-
-                            amount:
-                                amount,
-
-                            category:
-                                category,
-
-                            date:
-                                date
-
-                        })
-
-                    }
-                );
-
-
-            const data =
-                await response.json();
-
-
-            if (!response.ok) {
-
-                showExpenseMessage(
-                    data.detail ||
-                    "Failed to add expense.",
-                    true
-                );
-
-                return;
-
-            }
-
-
-            /* Clear form */
-
-            document.getElementById(
-                "title"
-            ).value = "";
-
-
-            document.getElementById(
-                "amount"
-            ).value = "";
-
-
-            document.getElementById(
-                "category"
-            ).value = "";
-
-
-            document.getElementById(
-                "date"
-            ).value = "";
-
-
-            showExpenseMessage(
-                "Expense added successfully!",
-                false
-            );
-
-
-            /* Refresh dashboard */
-
-            loadExpenses();
-
-            loadSummary();
-
-        }
-
-
-        catch (error) {
-
-            console.error(
-                "Add expense error:",
-                error
-            );
-
-
-            showExpenseMessage(
-                "Could not connect to the server.",
-                true
-            );
-
-        }
-
-    }
-
-
-    /* ==================================================
-       LOAD EXPENSES
-    ================================================== */
-
-    async function loadExpenses() {
-
-        const container =
-            document.getElementById(
-                "expenses"
-            );
-
-
-        try {
-
-            const response =
-                await fetch(
-                    `${API_URL}/api/expenses/`,
-                    {
-                        method: "GET",
-
-                        headers: {
-
-                            "Authorization":
-                                `Bearer ${accessToken}`
-
-                        }
-
-                    }
-                );
-
-
-            const data =
-                await response.json();
-
-
-            if (!response.ok) {
-
-                container.innerHTML = `
-
-                    <div class="empty-state">
-
-                        <p class="error">
-                            ${
-                                data.detail ||
-                                "Failed to load expenses."
-                            }
-                        </p>
-
-                    </div>
-
-                `;
-
-                return;
-
-            }
-
-
-            /* Update count */
-
-            document.getElementById(
-                "expenseCount"
-            ).innerText = data.length;
-
-
-            if (data.length === 0) {
-
-                container.innerHTML = `
-
-                    <div class="empty-state">
-
-                        <div class="empty-icon">
-                            ₹
-                        </div>
-
-                        <p>
-                            No expenses yet.
-                            Add your first expense above.
-                        </p>
-
-                    </div>
-
-                `;
-
-                return;
-
-            }
-
-
-            container.innerHTML =
-
-                data
-                    .slice()
-                    .reverse()
-                    .map(expense => `
-
-                        <div class="expense">
-
-                            <div class="expense-left">
-
-                                <div class="expense-icon">
-                                    ₹
-                                </div>
-
-                                <div class="expense-info">
-
-                                    <div
-                                        class="expense-title"
-                                    >
-                                        ${escapeHTML(
-                                            expense.title
-                                        )}
-                                    </div>
-
-                                    <div
-                                        class="expense-meta"
-                                    >
-                                        ${
-                                            escapeHTML(
-                                                expense.category
-                                            )
-                                        }
-                                        ·
-                                        ${expense.date}
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            <div
-                                class="expense-amount"
-                            >
-                                ₹${expense.amount}
-                            </div>
-
-                        </div>
-
-                    `)
-                    .join("");
-
-        }
-
-
-        catch (error) {
-
-            console.error(
-                "Load expenses error:",
-                error
-            );
-
-
-            container.innerHTML = `
-
-                <div class="empty-state">
-
-                    <p class="error">
-                        Could not connect to the server.
-                    </p>
-
-                </div>
-
-            `;
-
-        }
-
-    }
-
-
-    /* ==================================================
-       LOAD SUMMARY
-    ================================================== */
-
-    async function loadSummary() {
-
-        const container =
-            document.getElementById(
-                "summary"
-            );
-
-
-        try {
-
-            const response =
-                await fetch(
-                    `${API_URL}/api/expenses/summary/`,
-                    {
-                        method: "GET",
-
-                        headers: {
-
-                            "Authorization":
-                                `Bearer ${accessToken}`
-
-                        }
-
-                    }
-                );
-
-
-            const data =
-                await response.json();
-
-
-            if (!response.ok) {
-
-                container.innerHTML = `
-
-                    <p class="error">
-                        ${
-                            data.detail ||
-                            "Failed to load summary."
-                        }
-                    </p>
-
-                `;
-
-                return;
-
-            }
-
-
-            /* Total spent */
-
-            const total =
-                Number(data.total || 0);
-
-
-            document.getElementById(
-                "totalSpent"
-            ).innerText =
-                `₹${total.toFixed(2)}`;
-
-
-            /* Categories */
-
-            const categories =
-                data.categories || {};
-
-
-            const categoryEntries =
-                Object.entries(categories);
-
-
-            document.getElementById(
-                "categoryCount"
-            ).innerText =
-                categoryEntries.length;
-
-
-            let categoryHTML = "";
-
-
-            for (
-                const [category, amount]
-                of categoryEntries
-            ) {
-
-                categoryHTML += `
-
-                    <div class="category">
-
-                        <span class="category-name">
-                            ${escapeHTML(category)}
-                        </span>
-
-                        <span class="category-amount">
-                            ₹${Number(amount).toFixed(2)}
-                        </span>
-
-                    </div>
-
-                `;
-
-            }
-
-
-            if (!categoryHTML) {
-
-                categoryHTML = `
-
-                    <div class="empty-state">
-
-                        <p>
-                            No spending data yet.
-                        </p>
-
-                    </div>
-
-                `;
-
-            }
-
-
-            container.innerHTML = `
-
-                <div class="total-box">
-
-                    <div class="total-label">
-                        TOTAL SPENDING
-                    </div>
-
-                    <div class="total-value">
-                        ₹${total.toFixed(2)}
-                    </div>
-
-                </div>
-
-
-                <div class="category-title">
-                    Spending by Category
-                </div>
-
-
-                <div class="category-list">
-
-                    ${categoryHTML}
-
-                </div>
-
-            `;
-
-        }
-
-
-        catch (error) {
-
-            console.error(
-                "Summary error:",
-                error
-            );
-
-
-            container.innerHTML = `
-
-                <p class="error">
-                    Failed to load spending summary.
-                </p>
-
-            `;
-
-        }
-
-    }
-
-
-    /* ==================================================
-       ESCAPE HTML
-       Prevents user-entered text from being
-       inserted directly as HTML.
-    ================================================== */
-
-    function escapeHTML(value) {
-
-        return String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-
-    }
-
-
-    /* ==================================================
-       MESSAGES
-    ================================================== */
-
-    function showLoginMessage(
-        message,
-        isError
-    ) {
-
-        const element =
-            document.getElementById(
-                "loginMessage"
-            );
-
-
-        element.innerText =
-            message;
-
-
-        element.className =
-            isError
-                ? "message error"
-                : "message success";
-
-    }
-
-
-    function showExpenseMessage(
-        message,
-        isError
-    ) {
-
-        const element =
-            document.getElementById(
-                "expenseMessage"
-            );
-
-
-        element.innerText =
-            message;
-
-
-        element.className =
-            isError
-                ? "message error"
-                : "message success";
-
-    }
-
-
+const API_URL="http://127.0.0.1:8000";
+let accessToken=localStorage.getItem("accessToken");
+
+if(accessToken){showDashboard();}
+
+async function login(){
+const username=document.getElementById("username").value.trim();
+const password=document.getElementById("password").value;
+
+if(!username||!password){showLoginMessage("Please enter your username and password.",true);return;}
+
+try{
+const response=await fetch(`${API_URL}/api/auth/login/`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:username,password:password})});
+const data=await response.json();
+
+if(!response.ok){showLoginMessage(data.detail||"Invalid username or password.",true);return;}
+
+accessToken=data.access;
+localStorage.setItem("accessToken",accessToken);
+showDashboard();
+}catch(error){
+console.error("Login error:",error);
+showLoginMessage("Could not connect to the server.",true);
+}
+}
+
+function showDashboard(){
+if(!accessToken){return;}
+document.getElementById("loginSection").classList.add("hidden");
+document.getElementById("dashboardSection").classList.remove("hidden");
+loadExpenses();
+loadSummary();
+}
+
+function logout(){
+accessToken="";
+localStorage.removeItem("accessToken");
+document.getElementById("dashboardSection").classList.add("hidden");
+document.getElementById("loginSection").classList.remove("hidden");
+document.getElementById("username").value="";
+document.getElementById("password").value="";
+showLoginMessage("You have been logged out.",false);
+}
+
+async function addExpense(){
+const title=document.getElementById("title").value.trim();
+const amount=document.getElementById("amount").value;
+const category=document.getElementById("category").value;
+const date=document.getElementById("date").value;
+
+if(!title||!amount||!category||!date){showExpenseMessage("Please fill in all fields.",true);return;}
+
+try{
+const response=await fetch(`${API_URL}/api/expenses/`,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${accessToken}`},body:JSON.stringify({title:title,amount:amount,category:category,date:date})});
+const data=await response.json();
+
+if(!response.ok){showExpenseMessage(data.detail||"Failed to add expense.",true);return;}
+
+document.getElementById("title").value="";
+document.getElementById("amount").value="";
+document.getElementById("category").value="";
+document.getElementById("date").value="";
+showExpenseMessage("Expense added successfully!",false);
+loadExpenses();
+loadSummary();
+}catch(error){
+console.error("Add expense error:",error);
+showExpenseMessage("Could not connect to the server.",true);
+}
+}
+
+async function loadExpenses(){
+const container=document.getElementById("expenses");
+
+try{
+const response=await fetch(`${API_URL}/api/expenses/`,{method:"GET",headers:{"Authorization":`Bearer ${accessToken}`}});
+const data=await response.json();
+
+if(!response.ok){
+container.innerHTML=`<div class="empty-state"><p class="error">${data.detail||"Failed to load expenses."}</p></div>`;
+return;
+}
+
+document.getElementById("expenseCount").innerText=data.length;
+
+if(data.length===0){
+container.innerHTML=`<div class="empty-state"><div class="empty-icon">₹</div><p>No expenses yet. Add your first expense above.</p></div>`;
+return;
+}
+
+container.innerHTML=data.slice().reverse().map(expense=>`
+<div class="expense">
+<div class="expense-left">
+<div class="expense-icon">₹</div>
+<div class="expense-info">
+<div class="expense-title">${escapeHTML(expense.title)}</div>
+<div class="expense-meta">${escapeHTML(expense.category)} · ${expense.date}</div>
+</div>
+</div>
+<div class="expense-amount">₹${expense.amount}</div>
+</div>
+`).join("");
+}catch(error){
+console.error("Load expenses error:",error);
+container.innerHTML=`<div class="empty-state"><p class="error">Could not connect to the server.</p></div>`;
+}
+}
+
+async function loadSummary(){
+const container=document.getElementById("summary");
+
+try{
+const response=await fetch(`${API_URL}/api/expenses/summary/`,{method:"GET",headers:{"Authorization":`Bearer ${accessToken}`}});
+const data=await response.json();
+
+if(!response.ok){
+container.innerHTML=`<p class="error">${data.detail||"Failed to load summary."}</p>`;
+return;
+}
+
+const total=Number(data.total||0);
+document.getElementById("totalSpent").innerText=`₹${total.toFixed(2)}`;
+
+const categories=data.categories||{};
+const categoryEntries=Object.entries(categories);
+document.getElementById("categoryCount").innerText=categoryEntries.length;
+
+let categoryHTML="";
+
+for(const [category,amount] of categoryEntries){
+categoryHTML+=`
+<div class="category">
+<span class="category-name">${escapeHTML(category)}</span>
+<span class="category-amount">₹${Number(amount).toFixed(2)}</span>
+</div>`;
+}
+
+if(!categoryHTML){
+categoryHTML=`<div class="empty-state"><p>No spending data yet.</p></div>`;
+}
+
+container.innerHTML=`
+<div class="total-box">
+<div class="total-label">TOTAL SPENDING</div>
+<div class="total-value">₹${total.toFixed(2)}</div>
+</div>
+<div class="category-title">Spending by Category</div>
+<div class="category-list">${categoryHTML}</div>`;
+}catch(error){
+console.error("Summary error:",error);
+container.innerHTML=`<p class="error">Failed to load spending summary.</p>`;
+}
+}
+
+function escapeHTML(value){
+return String(value).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+function showLoginMessage(message,isError){
+const element=document.getElementById("loginMessage");
+element.innerText=message;
+element.className=isError?"message error":"message success";
+}
+
+function showExpenseMessage(message,isError){
+const element=document.getElementById("expenseMessage");
+element.innerText=message;
+element.className=isError?"message error":"message success";
+}
 </script>
-
 </body>
-
 </html>
